@@ -48,15 +48,6 @@ public class HttpConnection extends AbstractConnection {
     private static final int DEFAULT_READ_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(5);
 
     /**
-     * HostnameVerifier allowing wildcard certificates to work without adding them to the truststore.
-     */
-    private static final HostnameVerifier NAIVE_VERIFIER = new HostnameVerifier() {
-        @Override
-        public boolean verify(String hostname, SSLSession sslSession) {
-            return true;
-        }
-    };
-    /**
      * URL of the Sentry endpoint.
      */
     private final URL sentryUrl;
@@ -133,9 +124,6 @@ public class HttpConnection extends AbstractConnection {
                 connection = (HttpURLConnection) sentryUrl.openConnection();
             }
 
-            if (bypassSecurity && connection instanceof HttpsURLConnection) {
-                ((HttpsURLConnection) connection).setHostnameVerifier(NAIVE_VERIFIER);
-            }
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
             connection.setConnectTimeout(connectionTimeout);
